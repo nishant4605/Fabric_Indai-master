@@ -37,9 +37,15 @@ pipeline {
 
         stage('Deploy with Docker Compose') {
             steps {
-                sh "docker-compose down || true"
-                sh "docker-compose pull"
-                sh "docker-compose up -d --build"
+                script {
+                    // Optional: Copy env if needed
+                    sh 'cp ./backend/.env.example ./backend/.env || true'
+
+                    // Use 'docker compose' instead of deprecated 'docker-compose'
+                    sh "docker compose down || true"
+                    sh "docker compose pull"
+                    sh "docker compose up -d"
+                }
             }
         }
     }
